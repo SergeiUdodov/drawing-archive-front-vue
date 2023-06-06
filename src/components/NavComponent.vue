@@ -1,20 +1,32 @@
 <template>
   <nav class="navbar navbar-expand navbar-light fixed-top">
     <div class="container">
-      <router-link to="/drawings" class="navbar-brand" v-if="token">На главную</router-link>
+      <router-link to="/" class="navbar-brand" v-if="token">На главную</router-link>
       <div>
 
         <ul class="navbar-nav ml-auto" v-if="token">
+          <li class="nav-item">
+            <UserComponent class="nav-link" />
+          </li>
+          <li class="nav-item">
+            <div class="nav-link"> | </div>
+          </li>
+          <li class="nav-item" v-if="isAdmin">
+            <router-link to="/addDrawing" class="nav-link">Добавить чертеж</router-link>
+          </li>
+          <li class="nav-item" v-if="isAdmin">
+            <div class="nav-link"> | </div>
+          </li>
           <li class="nav-item" v-if="isAdmin">
             <router-link to="/register" class="nav-link">Зарегистрировать пользователя</router-link>
           </li>
           <li class="nav-item" v-if="isAdmin">
             <div class="nav-link"> | </div>
           </li>
-          <li class="nav-item" v-if="isAdmin">
+          <li class="nav-item">
             <router-link to="/settings" class="nav-link">Настройки</router-link>
           </li>
-          <li class="nav-item" v-if="isAdmin">
+          <li class="nav-item">
             <div class="nav-link"> | </div>
           </li>
           <li class="nav-item">
@@ -29,9 +41,14 @@
 
 <script>
 import axios from 'axios';
+import UserComponent from './UserComponent.vue'
 
 export default {
   name: 'NavComponent',
+  components: {
+    UserComponent
+
+  },
   data() {
     return {
       token: '',
@@ -41,7 +58,7 @@ export default {
   methods: {
     getOut() {
       localStorage.removeItem('token');
-      // this.$router.push('/');
+      // this.$router.push('/login');
       window.location.replace('/');
     }
   },

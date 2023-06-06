@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAdmin">
+  <div>
     <ErrorComponent v-if="error" :error="error" />
 
     <h3>Настройки</h3>
@@ -26,7 +26,7 @@
     </div>
     <br>
     <button @click="updateUser()" class="btn btn-primary btn-block" style="margin: 15px">Сохранить</button>
-    <router-link to="/drawings" class="btn btn-primary btn-block" style="margin: 15px">Назад</router-link>
+    <router-link to="/" class="btn btn-primary btn-block" style="margin: 15px">Назад</router-link>
   </div>
 </template>
 

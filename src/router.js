@@ -7,8 +7,8 @@ import AddDrawing from './components/AddDrawing.vue'
 import UpdateDrawing from './components/UpdateDrawing.vue'
 
 const routes = [
-    {path: '/', component: LoginComponent},
-    {path: '/drawings', component: DrawingsComponent},
+    {path: '/', component: DrawingsComponent},
+    {path: '/login', component: LoginComponent},
     {path: '/register', component: RegisterComponent},
     {path: '/settings', component: UserSettings},
     {path: '/addDrawing', component: AddDrawing},

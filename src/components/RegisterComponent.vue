@@ -41,11 +41,19 @@ import ErrorComponent from './ErrorComponent.vue'
                 last_name: null,
                 email: null,
                 password: null,
-                error: ''
+                error: '',
+                token: ''
             }
         },
         methods: {
             async handleSubmit(){
+
+                if (localStorage.getItem("token")) {
+                    this.token = "Bearer " + localStorage.getItem("token");
+
+                } else {
+                    this.token = "";
+                }
                     try{
                 const response = await axios.post('register', {
                     firstName: this.first_name,
@@ -53,14 +61,20 @@ import ErrorComponent from './ErrorComponent.vue'
                     email: this.email,
                     password: this.password
 
+                },
+                {
+                    headers: {
+                        Authorization: this.token
+                    }
                 });
                 
                 console.log(response);
-                this.$router.push('/login');
+                this.$router.push('/');
 
                 } catch (e){
                     window.scrollTo(0,0);
                     this.error = 'Не все поля заполнены / email уже существует';
+                    // this.error = e;
                 }
             }
         }

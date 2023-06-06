@@ -25,7 +25,7 @@
         </div>
 
         <button class="btn btn-primary btn-block" style="margin: 15px">Сохранить</button>
-        <router-link to="/drawings" class="btn btn-primary btn-block" style="margin: 15px">Назад</router-link>
+        <router-link to="/" class="btn btn-primary btn-block" style="margin: 15px">Назад</router-link>
     </form>
 </template>
 
@@ -74,7 +74,7 @@ export default {
 
                 localStorage.removeItem('drawingId');
 
-                this.$router.push('/drawings')
+                this.$router.push('/')
                 // window.location.replace('/');
                 // document.location.reload()
 
@@ -110,7 +110,7 @@ export default {
             this.drawingId = ''
         }
 
-        await axios.get('api/drawings').then((response) => {
+        await axios.get('api/drawings/').then((response) => {
             this.drawings = response.data;
             for (let i in this.drawings) {
                 if (this.drawings[i].id == this.drawingId) {

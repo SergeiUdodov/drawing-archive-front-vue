@@ -69,7 +69,7 @@ export default {
   }
 
   .auth-inner {
-    width: 50%;
+    width: 45%;
     height: 100%;
     margin: auto;
     background: #ffffff;

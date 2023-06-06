@@ -1,27 +1,47 @@
 <template>
   <div v-if="token"> 
-        <div v-for="drawing in drawings" :key="drawing.id">
 
-          <div class="block">
-                <img v-bind:src="drawing.imageURL" />
-                <h5>{{ drawing.designation }}</h5>
-                <p>{{ drawing.name }}</p>
-          </div>
+    <form @submit.prevent="handleSubmit">
 
-          <button v-if="isAdmin" type="button" class="btn btn-link" @click="deleteDrawing(drawing.id)">
-            Удалить чертеж
-          </button>
+      <div class="form-group">
+          <input type="text" class="form-control" v-model="request" placeholder="Введите запрос..."/>
+      </div>
 
-          <router-link to="/updateDrawing" v-if="isAdmin" class="btn btn-link"
-            @click="saveDrawingId(drawing.id)">Редактировать чертеж</router-link>
+      <button class="btn btn-primary btn-block" style="margin: 15px">Найти</button>
+    </form>
 
-          <div style="display: flex; align-items: flex-end; margin-bottom: 10px; margin-left: 10px">
-            <div style="margin: 5px">Обновлено {{ drawing.date.slice(0, 16) }}</div>
-          </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Обозначение</th>
+          <th scope="col">Название</th>
+          <th scope="col">Версия</th>
+          <th scope="col">Дата изменения</th>
+          <th scope="col">Кто изменил</th>
+          <th scope="col">Действие</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="drawing in drawings" :key="drawing.id">
+          <td>{{ drawing.designation }}</td>
+          <td>{{ drawing.name }}</td>
+          <td>{{ drawing.version }}</td>
+          <td>{{ drawing.date }}</td>
+          <td>{{ drawing.user.firstName }} {{ drawing.user.lastName }}</td>
+          <td>          
+            <button type="button" class="btn btn-link" @click="openDrawing(drawing.imageURL)">
+              Открыть
+            </button>
+            <router-link to="/updateDrawing" v-if="isAdmin" class="btn btn-link"
+            @click="saveDrawingId(drawing.id)">Редактировать</router-link>
+            <button v-if="isAdmin" @click="deleteDrawing(drawing.id)" class="btn btn-link">
+              Удалить
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-          <hr />
-          <br />
-        </div>
   </div>
 </template>
 
@@ -35,6 +55,7 @@ export default {
       drawings: [],
       token: "",
       isAdmin: false,
+      request: '',
     };
   },
   methods: {
@@ -51,7 +72,18 @@ export default {
     },
     saveDrawingId(drawingId) {
       localStorage.setItem("drawingId", drawingId);
-    }
+    },
+    async handleSubmit(){
+
+    await axios
+      .get("api/drawings/" + this.request)
+      .then((response) => {
+        this.drawings = response.data;
+      });
+    },
+    openDrawing(drawingURL) {
+      window.open(drawingURL, '_blank').focus();
+    },
   },
   async created() {
     if (localStorage.getItem("token")) {
@@ -65,15 +97,9 @@ export default {
     } else {
       this.token = "";
       this.isAdmin = false;
+      this.$router.push('/login');
+      // window.location.replace('/drawings');
     }
-
-    await axios
-      .get("api/drawings", { headers: { Authorization: this.token } })
-      .then((response) => {
-        this.drawings = response.data;
-      });
-
-      console.log(this.drawings);
   },
 };
 </script>
