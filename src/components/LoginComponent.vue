@@ -42,7 +42,7 @@
                     password: this.password
                 });
 
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('token', response.data.jwttoken);
 
                 // this.$router.push('/drawings');
                 window.location.replace('/');
